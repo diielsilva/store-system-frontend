@@ -1,0 +1,25 @@
+<div class="flex justify-content-center align-items-center h-7">
+    <div class="col-10 max-w-700">
+        <p-panel header="Cadastrar Produto">
+            <form [formGroup]="form" (ngSubmit)="handleSubmitForm()">
+                <div class="m-2">
+                    <input class="w-full" pInputText type="text" formControlName="name" placeholder="Nome">
+                </div>
+                <div class="m-2 flex flex-column field">
+                    <p-inputNumber formControlName="price" [minFractionDigits]="2" [maxFractionDigits]="2"
+                        styleClass="w-full" placeholder="Preço"></p-inputNumber>
+                </div>
+                <div class="m-2 flex flex-column field">
+                    <p-inputNumber formControlName="amount" styleClass="w-full"
+                        placeholder="Quantidade"></p-inputNumber>
+                </div>
+                <div class="m-2">
+                    <button class="w-full" pButton type="submit" label="Cadastrar"
+                        [disabled]="shouldDisableButton()"></button>
+                </div>
+            </form>
+        </p-panel>
+    </div>
+</div>
+<app-loading></app-loading>
+<app-message></app-message>

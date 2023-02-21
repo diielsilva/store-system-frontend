@@ -1,0 +1,67 @@
+<div class="m-2 p-2">
+    <p-panel header="Produtos Ativos">
+        <div class="flex align-items-center justify-content-between p-2">
+            <div>
+                Para pesquisar digite um nome, ou apenas clique no botão para listar todos os produtos ativos.
+            </div>
+            <div>
+                <form class="flex align-items-center" [formGroup]="searchForm!" (ngSubmit)="searchProduct()">
+                    <div class="m-1 max-w-700">
+                        <input pInputText type="text" placeholder="Pesquisar" formControlName="name">
+                    </div>
+                    <div class="m-1">
+                        <button pButton icon="pi pi-search" class="p-button-text"
+                            [disabled]="loadingProvider.loading.getValue()" type="submit"></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <p-table [value]="products" [lazy]="true" [paginator]="true" [rows]="20" styleClass="p-datatable-striped"
+            [loading]="loadingProvider.loading.getValue()" (onPage)="handlePageChange($event)"
+            [totalRecords]="totalProducts">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th class="bg-primary">ID</th>
+                    <th class="bg-primary">Nome</th>
+                    <th class="bg-primary">Preço</th>
+                    <th class="bg-primary">Quantidade</th>
+                    <th class="bg-primary" *ngIf="authService.isUserAdmin()">Editar</th>
+                    <th class="bg-primary" *ngIf="authService.isUserAdmin()">Remover</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-product>
+                <tr>
+                    <td class="border-none">{{ product.id }}</td>
+                    <td class="border-none">{{ product.name }}</td>
+                    <td class="border-none">R${{ product.price.toFixed(2) }}</td>
+                    <td class="border-none">{{ product.amount }}</td>
+                    <td class="border-none" *ngIf="authService.isUserAdmin()"><button class="p-button-text" pButton
+                            icon="pi pi-pencil" (click)="displayUpdateForm(product)"></button></td>
+                    <td class="border-none" *ngIf="authService.isUserAdmin()"><button class="p-button-text" pButton
+                            icon="pi pi-trash" (click)="removeProduct(product.id)"></button></td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </p-panel>
+</div>
+<p-dialog header="Editar Produto" [(visible)]="dialog" [closable]="true" [style]="{width: '50vw'}"
+    styleClass="max-w-700" [draggable]="false" [resizable]="false" [modal]="true">
+    <ng-template pTemplate="content">
+        <form [formGroup]="updateForm!" (ngSubmit)="updateProduct()">
+            <div class="m-2">
+                <input class="w-full" pInputText type="text" formControlName="name" placeholder="Nome">
+            </div>
+            <div class="m-2 flex flex-column field">
+                <p-inputNumber formControlName="price" [minFractionDigits]="2" [maxFractionDigits]="2"
+                    styleClass="w-full" placeholder="Preço"></p-inputNumber>
+            </div>
+            <div class="m-2 flex flex-column field">
+                <p-inputNumber formControlName="amount" styleClass="w-full" placeholder="Quantidade"></p-inputNumber>
+            </div>
+            <div class="m-2 flex justify-content-end">
+                <button class="p-button-text" pButton type="submit" label="Editar"
+                    [disabled]="shouldDisableButton()"></button>
+            </div>
+        </form>
+    </ng-template>
+</p-dialog>

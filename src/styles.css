@@ -1,1 +1,30 @@
 /* You can add global styles to this file, and also import other style files */
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+.h-7 {
+    height: 70%;
+}
+
+.max-w-700 {
+    max-width: 700px;
+}
+
+.border-none {
+    border: none;
+}
+
+.list-decoration-none {
+    list-style: none;
+}
+
+.text-decoration-none {
+    text-decoration: none;
+}

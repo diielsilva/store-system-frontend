@@ -1,0 +1,80 @@
+<div class="flex justify-content-center">
+    <div class="col-12 max-w-700">
+        <p-panel header="Carrinho de Compras">
+            <ng-template pTemplate="content">
+                <div>
+                    <form [formGroup]="form" (ngSubmit)="insertIntoShoppingCart()">
+                        <div class="m-2 flex flex-column field">
+                            <p-inputNumber formControlName="productId" styleClass="w-full"
+                                placeholder="ID do Produto"></p-inputNumber>
+                        </div>
+                        <div class="m-2 flex flex-column field">
+                            <p-inputNumber formControlName="amount" styleClass="w-full"
+                                placeholder="Quantidade"></p-inputNumber>
+                        </div>
+                        <div class="m-2">
+                            <button pButton label="Adicionar" class="w-full" [disabled]="shouldDisableFormButton()"
+                                type="submit"></button>
+                        </div>
+                    </form>
+                </div>
+                <div *ngIf="saleService.getShoppingCart().length > 0">
+                    <p-divider></p-divider>
+                    <p-panel header="Produtos no Carrinho">
+                        <p-table [value]="saleService.getShoppingCart()" [paginator]="false"
+                            styleClass="p-datatable-striped" [loading]="loadingProvider.loading.getValue()">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th class="bg-primary">ID</th>
+                                    <th class="bg-primary">Quantidade</th>
+                                    <th class="bg-primary">Remover</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-saleProductDto>
+                                <tr>
+                                    <td class="border-none">{{ saleProductDto.productId }}</td>
+                                    <td class="border-none">{{ saleProductDto.amount }}</td>
+                                    <td class="border-none">
+                                        <button pButton icon="pi pi-trash" class="p-button-text"
+                                            (click)="removeFromShoppingCart(saleProductDto)"></button>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                        <p-divider></p-divider>
+                        <div class="flex flex-column justify-content-center align-items-center ">
+                            <h3>Sub Total</h3>
+                            <p>R${{ totalShoppingCart }}</p>
+                        </div>
+                    </p-panel>
+                </div>
+                <p-divider></p-divider>
+                <div class="">
+                    <div>
+                        <div class="m-2">
+                            <select
+                                class="w-full text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round outline-none focus:border-primary"
+                                [(ngModel)]="paymentType">
+                                <option value="CASH">Dinheiro</option>
+                                <option value="CARD">Cartão</option>
+                                <option value="PIX">Pix</option>
+                            </select>
+                        </div>
+
+                        <div class="m-2 flex justify-content-between">
+
+                            <button pButton class="p-button-text" label="Gerar PDF"
+                                [disabled]="shouldDisablePdfButton()" (click)="getCartPdf()"></button>
+
+                            <button pButton class="p-button-text" label="Confirmar"
+                                [disabled]="shouldDisableNextStepButton()" (click)="confirmSale()"></button>
+                        </div>
+                    </div>
+
+                </div>
+            </ng-template>
+        </p-panel>
+    </div>
+</div>
+<app-loading></app-loading>
+<app-message></app-message>

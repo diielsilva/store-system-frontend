@@ -1,0 +1,79 @@
+<p-toolbar *ngIf="authService.isUserOnline()"
+    styleClass="border-none border-noround flex justify-content-between bg-primary">
+    <div>
+        <button pButton class="p-button-text text-white" icon="pi pi-align-justify" label="Menu de Opções"
+            (click)="sidebarProvider.displayOrHideSidebar()"></button>
+    </div>
+    <div>
+        <button pButton class="p-button-text text-white" icon="pi pi-user"></button>
+    </div>
+</p-toolbar>
+<p-sidebar [(visible)]="sidebarProvider.sidebar">
+    <ul class="list-decoration-none">
+        <li>
+            <a routerLink="home" class="text-decoration-none"><button pButton label="Início" icon="pi pi-home"
+                    class="p-button-text" (click)="sidebarProvider.displayOrHideSidebar()"></button></a>
+        </li>
+        <li>
+            <div>
+                <p-divider></p-divider>
+                <h3 class="ml-3">Produtos</h3>
+                <ul class="list-decoration-none">
+                    <li>
+                        <a routerLink="home/products" class="text-decoration-none">
+                            <button pButton label="Ativos" icon="pi pi-align-justify" class="p-button-text"
+                                (click)="sidebarProvider.displayOrHideSidebar()"></button>
+                        </a>
+                    </li>
+                    <li>
+                        <a routerLink="home/products/inactive" class="text-decoration-none">
+                            <button pButton label="Inativos" icon="pi pi-align-justify" class="p-button-text"
+                                (click)="sidebarProvider.displayOrHideSidebar()"></button>
+                        </a>
+                    </li>
+                    <li *ngIf="authService.isUserAdmin()">
+                        <a routerLink="home/products/insert" class="text-decoration-none">
+                            <button pButton label="Adicionar" icon="pi pi-plus" class="p-button-text"
+                                (click)="sidebarProvider.displayOrHideSidebar()"></button>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+        <li>
+            <div>
+                <p-divider></p-divider>
+                <h3 class="ml-3">Vendas</h3>
+                <ul class="list-decoration-none">
+                    <li *ngIf="authService.isUserAdmin()">
+                        <a routerLink="home/sales" class="text-decoration-none">
+                            <button pButton label=" Ativas" icon="pi pi-align-justify"
+                                (click)="sidebarProvider.displayOrHideSidebar()" class="p-button-text"></button>
+                        </a>
+                    </li>
+                    <li>
+                        <a routerLink="home/sales/insert" class="text-decoration-none">
+                            <button pButton label="Inserir" icon="pi pi-plus" class="p-button-text"
+                                (click)="sidebarProvider.displayOrHideSidebar()"></button>
+                        </a>
+                    </li>
+                    <li>
+                        <a routerLink="home/sales/today" class="text-decoration-none">
+                            <button pButton label="De Hoje" icon="pi pi-calendar" class="p-button-text"
+                                (click)="sidebarProvider.displayOrHideSidebar()"></button>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+        <li>
+            <div>
+                <p-divider></p-divider>
+                <a routerLink="/" class="text-decoration-none">
+                    <button pButton label="Sair" icon="pi pi-power-off" class="p-button-text"
+                        (click)="sidebarProvider.displayOrHideSidebar()"></button>
+                </a>
+            </div>
+        </li>
+    </ul>
+</p-sidebar>

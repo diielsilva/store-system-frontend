@@ -1,0 +1,50 @@
+<div class="m-2 p-2">
+    <p-panel header="Vendas Ativas" [draggable]="false">
+        <p-table [value]="sales" [lazy]="true" [paginator]="true" [rows]="20" styleClass="p-datatable-striped"
+            [loading]="loadingProvider.loading.getValue()" (onPage)="handlePageChange($event)"
+            [totalRecords]="totalSales">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th class="bg-primary">Vendedor</th>
+                    <th class="bg-primary">Total</th>
+                    <th class="bg-primary">Método PGMT.</th>
+                    <th class="bg-primary">Data</th>
+                    <th class="bg-primary">Detalhes</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-sale>
+                <tr>
+                    <td class="border-none">{{ sale.user.name }}</td>
+                    <td class="border-none">R${{ sale.total }}</td>
+                    <td class="border-none">{{ translatePaymentType(sale.paymentType) }}</td>
+                    <td class="border-none">{{ sale.createdAt | date: 'dd/MM/yyyy'}}</td>
+                    <td class="border-none">
+                        <button pButton class="p-button-text" icon="pi pi-info-circle"
+                            (click)="getSaleDetails(sale.id)"></button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </p-panel>
+</div>
+<p-dialog header="Detalhes da Venda" [(visible)]="dialog" [closable]="true" [style]="{width: '50vw'}"
+    styleClass="max-w-700" [draggable]="false" [resizable]="false" [modal]="true">
+    <p-panel header="Detalhes do Produto" *ngFor="let saleProduct of saleProducts" styleClass="m-2">
+        <ng-template pTemplate="body">
+            <div class="m-1">
+                <h4>Nome</h4>
+                <p>{{ saleProduct.product.name }}</p>
+            </div>
+            <p-divider></p-divider>
+            <div class="m-1">
+                <h4>Preço na Venda</h4>
+                <p>R${{ saleProduct.priceAtSale }}</p>
+            </div>
+            <p-divider></p-divider>
+            <div class="m-1">
+                <h4>Quantidade da Venda</h4>
+                <p>{{ saleProduct.amount }}</p>
+            </div>
+        </ng-template>
+    </p-panel>
+</p-dialog>

@@ -1,0 +1,19 @@
+<div class="flex justify-content-center align-items-center h-7">
+    <div class="col-10 max-w-700">
+        <p-panel header="Realizar Autenticação">
+            <form [formGroup]="form" (ngSubmit)="handleSubmitForm();">
+                <div class="m-2">
+                    <input class="w-full" pInputText type="text" formControlName="username" placeholder="Usuário">
+                </div>
+                <div class="m-2">
+                    <input class="w-full" pInputText type="password" formControlName="password" placeholder="Senha">
+                </div>
+                <div class="m-2">
+                    <button class="w-full" pButton type="submit" label="Autenticar"  [disabled]="shouldDisableButton()"></button>
+                </div>
+            </form>
+        </p-panel>
+    </div>
+</div>
+<app-loading></app-loading>
+<app-message></app-message>
