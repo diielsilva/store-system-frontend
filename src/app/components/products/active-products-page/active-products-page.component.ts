@@ -38,6 +38,56 @@ export class ActiveProductsPageComponent implements OnInit, OnDestroy {
     this.disposeProvider.dispose();
   }
 
+  public displayUpdateForm(product: ProductEntity): void {
+    this.selectedProduct = product;
+    this.dialog = true;
+    this.createUpdateForm(this.selectedProduct!);
+  }
+
+  public updateSelectedProductValues(): void {
+    this.selectedProduct!.name = this.updateForm!.get('name')!.value
+    this.selectedProduct!.price = this.updateForm!.get('price')!.value
+    this.selectedProduct!.amount = this.updateForm!.get('amount')!.value
+  }
+
+  private createUpdateForm(product: ProductEntity): void {
+    this.updateForm = this.formBuilder.group({
+      name: [product.name, Validators.required],
+      price: [product.price, [Validators.required, Validators.min(0)]],
+      amount: [product.amount, [Validators.required, Validators.min(0)]]
+    });
+  }
+
+  private createSearchForm(): void {
+    this.searchForm = this.formBuilder.group({
+      name: ['']
+    });
+  }
+
+  public handlePageChange(event: LazyLoadEvent): void {
+    this.changePage(event.first!);
+    this.searchProduct();
+  }
+
+  private changePage(rows: number): void {
+    this.actualPage = rows / 20;
+  }
+
+  public resetPaginator(): void {
+    this.products = [];
+    this.actualPage = 0;
+    this.totalProducts = 0;
+  }
+
+  public shouldDisableButton(): boolean {
+    return this.loadingProvider.loading.getValue() || this.updateForm!.invalid;
+  }
+
+  public getLoading(): boolean {
+    return this.loadingProvider.loading.getValue();
+  }
+
+
   private getActiveProducts(): void {
     let subscription$: Subscription = this.productService.getActiveProducts(this.actualPage).subscribe(
       {
@@ -105,50 +155,4 @@ export class ActiveProductsPageComponent implements OnInit, OnDestroy {
     );
     this.disposeProvider.insert(subscription$);
   }
-
-  public displayUpdateForm(product: ProductEntity): void {
-    this.selectedProduct = product;
-    this.dialog = true;
-    this.createUpdateForm(this.selectedProduct!);
-  }
-
-  public updateSelectedProductValues(): void {
-    this.selectedProduct!.name = this.updateForm!.get('name')!.value
-    this.selectedProduct!.price = this.updateForm!.get('price')!.value
-    this.selectedProduct!.amount = this.updateForm!.get('amount')!.value
-  }
-
-  private createUpdateForm(product: ProductEntity): void {
-    this.updateForm = this.formBuilder.group({
-      name: [product.name, Validators.required],
-      price: [product.price, [Validators.required, Validators.min(0)]],
-      amount: [product.amount, [Validators.required, Validators.min(0)]]
-    });
-  }
-
-  private createSearchForm(): void {
-    this.searchForm = this.formBuilder.group({
-      name: ['']
-    });
-  }
-
-  public handlePageChange(event: LazyLoadEvent): void {
-    this.changePage(event.first!);
-    this.searchProduct();
-  }
-
-  private changePage(rows: number): void {
-    this.actualPage = rows / 20;
-  }
-
-  public resetPaginator(): void {
-    this.products = [];
-    this.actualPage = 0;
-    this.totalProducts = 0;
-  }
-
-  public shouldDisableButton(): boolean {
-    return this.loadingProvider.loading.getValue() || this.updateForm!.invalid;
-  }
-
 }

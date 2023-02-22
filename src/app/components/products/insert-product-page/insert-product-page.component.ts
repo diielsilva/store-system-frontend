@@ -35,11 +35,14 @@ export class InsertProductPageComponent implements OnDestroy {
     }
   }
 
+  public shouldDisableButton(): boolean {
+    return this.form.invalid || this.loadingProvider.loading.getValue();
+  }
   private saveProduct(): void {
     let product: ProductEntity = { name: this.form.get('name')!.value, price: this.form.get('price')!.value, amount: this.form.get('amount')!.value };
     let subscription$ = this.productService.saveProduct(product).subscribe({
       next: () => {
-        this.messageProvider.displayMessage('success', 'Cadastro Realizado', 'O produto foi cadastrado com sucesso!');
+        this.messageProvider.displayMessage('success', 'Sucesso no Cadastro', 'O produto foi cadastrado com sucesso!');
         this.form.reset();
       },
       error: (error: HttpErrorResponse) => {
@@ -47,10 +50,6 @@ export class InsertProductPageComponent implements OnDestroy {
       }
     });
     this.disposeProvider.insert(subscription$);
-  }
-
-  public shouldDisableButton(): boolean {
-    return this.form.invalid || this.loadingProvider.loading.getValue();
   }
 
 }

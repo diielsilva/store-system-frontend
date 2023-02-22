@@ -20,10 +20,7 @@ export class AuthPageComponent implements OnInit, OnDestroy {
 
   constructor(private formBuilder: FormBuilder, private authService: AuthenticationService, private router: Router, private disposeProvider: DisposeProvider,
     private messageProvider: MessageProvider, private loadingProvider: LoadingProvider) {
-    this.form = this.formBuilder.group({
-      username: ['', Validators.required],
-      password: ['', Validators.required]
-    });
+    this.form = this.createAuthForm();
   }
 
   ngOnInit(): void {
@@ -34,7 +31,18 @@ export class AuthPageComponent implements OnInit, OnDestroy {
     this.disposeProvider.dispose();
   }
 
-  public handleSubmitForm(): void {
+  private createAuthForm(): FormGroup {
+    return this.formBuilder.group({
+      username: ['', Validators.required],
+      password: ['', Validators.required]
+    });
+  }
+
+  public shouldDisableAuthForm(): boolean {
+    return this.form.invalid || this.loadingProvider.loading.getValue();
+  }
+
+  public handleAuthFormSubmit(): void {
     if (this.form.valid) {
       this.attemptAuthenticate();
     }
@@ -52,10 +60,6 @@ export class AuthPageComponent implements OnInit, OnDestroy {
       }
     });
     this.disposeProvider.insert(subscription$);
-  }
-
-  public shouldDisableButton(): boolean {
-    return this.form.invalid || this.loadingProvider.loading.getValue();
   }
 
 }
