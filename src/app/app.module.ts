@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { DEFAULT_CURRENCY_CODE, LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { MessageService } from 'primeng/api';
 
@@ -22,6 +22,10 @@ import { MessageComponent } from './shared/components/message/message.component'
 import { NavbarComponent } from './shared/components/navbar/navbar.component';
 
 
+import { registerLocaleData } from '@angular/common';
+import ptBr from '@angular/common/locales/pt';
+
+registerLocaleData(ptBr);
 
 @NgModule({
   declarations: [
@@ -47,7 +51,7 @@ import { NavbarComponent } from './shared/components/navbar/navbar.component';
     BrowserAnimationsModule,
     FormsModule
   ],
-  providers: [HttpInterceptorsProvider, MessageService],
+  providers: [HttpInterceptorsProvider, MessageService, { provide: LOCALE_ID, useValue: 'pt' }, { provide: DEFAULT_CURRENCY_CODE, useValue: 'BRL' }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

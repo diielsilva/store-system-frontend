@@ -44,7 +44,7 @@
                         <p-divider></p-divider>
                         <div class="flex flex-column justify-content-center align-items-center ">
                             <h3>Sub Total</h3>
-                            <p>R${{ totalShoppingCart }}</p>
+                            <p>{{ totalShoppingCart.toFixed(2) | currency }}</p>
                         </div>
                     </p-panel>
                 </div>

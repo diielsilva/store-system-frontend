@@ -14,7 +14,7 @@
             <ng-template pTemplate="body" let-sale>
                 <tr>
                     <td class="border-none">{{ sale.user.name }}</td>
-                    <td class="border-none">R${{ sale.total }}</td>
+                    <td class="border-none">{{ sale.total.toFixed(2) | currency }}</td>
                     <td class="border-none">{{ translatePaymentType(sale.paymentType) }}</td>
                     <td class="border-none">{{ sale.createdAt | date: 'dd/MM/yyyy'}}</td>
                     <td class="border-none">
@@ -27,7 +27,7 @@
         <p-divider></p-divider>
         <div class="flex flex-column justify-content-center align-items-center ">
             <h3>Total das Vendas</h3>
-            <p>R${{ total }}</p>
+            <p>{{ total.toFixed(2) | currency }}</p>
         </div>
     </p-panel>
 </div>
@@ -42,7 +42,7 @@
             <p-divider></p-divider>
             <div class="m-1">
                 <h4>Preço na Venda</h4>
-                <p>R${{ saleProduct.priceAtSale }}</p>
+                <p>{{ saleProduct.priceAtSale.toFixed(2) | currency }}</p>
             </div>
             <p-divider></p-divider>
             <div class="m-1">

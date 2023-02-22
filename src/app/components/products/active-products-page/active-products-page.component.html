@@ -33,7 +33,7 @@
                 <tr>
                     <td class="border-none">{{ product.id }}</td>
                     <td class="border-none">{{ product.name }}</td>
-                    <td class="border-none">R${{ product.price.toFixed(2) }}</td>
+                    <td class="border-none">{{ product.price.toFixed(2) | currency }}</td>
                     <td class="border-none">{{ product.amount }}</td>
                     <td class="border-none" *ngIf="authService.isUserAdmin()"><button class="p-button-text" pButton
                             icon="pi pi-pencil" (click)="displayUpdateForm(product)"></button></td>
