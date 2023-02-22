@@ -41,6 +41,10 @@ export class InsertSalePageComponent implements OnInit, OnDestroy {
     return this.form.invalid;
   }
 
+  public getLoading(): boolean {
+    return this.loadingProvider.getLoading();
+  }
+
   public insertIntoShoppingCart(): void {
     if (this.form.valid) {
       let SaleProductDto: SaleProductDto = { productId: this.form.get('productId')!.value, amount: this.form.get('amount')!.value };

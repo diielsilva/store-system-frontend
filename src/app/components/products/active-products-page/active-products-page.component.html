@@ -10,8 +10,8 @@
                         <input pInputText type="text" placeholder="Pesquisar" formControlName="name">
                     </div>
                     <div class="m-1">
-                        <button pButton icon="pi pi-search" class="p-button-text"
-                            [disabled]="loadingProvider.loading.getValue()" type="submit"></button>
+                        <button pButton icon="pi pi-search" class="p-button-text" [disabled]="getLoading()"
+                            type="submit"></button>
                     </div>
                 </form>
             </div>

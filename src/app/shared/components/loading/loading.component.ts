@@ -10,4 +10,7 @@ export class LoadingComponent {
 
   constructor(public loadingProvider: LoadingProvider) { }
 
+  public getLoading(): boolean {
+    return this.loadingProvider.getLoading();
+  }
 }

@@ -31,6 +31,10 @@ export class InactiveProductsPageComponent implements OnInit, OnDestroy {
     this.disposeProvider.dispose();
   }
 
+  public getLoading(): boolean {
+    return this.loadingProvider.getLoading();
+  }
+
   private getInactiveProducts(): void {
     let subscription$: Subscription = this.productService.getInactiveProducts(this.actualPage).subscribe(
       {

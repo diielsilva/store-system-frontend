@@ -31,6 +31,10 @@ export class TodaySalesPageComponent implements OnInit, OnDestroy {
     this.disposeProvider.dispose();
   }
 
+  public getLoading(): boolean {
+    return this.loadingProvider.getLoading();
+  }
+
   private getTodaySales(): void {
     let subscription$ = this.saleService.getTodaySales().subscribe({
       next: (sales: SaleEntity[]) => {

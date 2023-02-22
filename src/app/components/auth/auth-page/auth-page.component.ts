@@ -39,7 +39,7 @@ export class AuthPageComponent implements OnInit, OnDestroy {
   }
 
   public shouldDisableAuthForm(): boolean {
-    return this.form.invalid || this.loadingProvider.loading.getValue();
+    return this.form.invalid || this.loadingProvider.getLoading();
   }
 
   public handleAuthFormSubmit(): void {

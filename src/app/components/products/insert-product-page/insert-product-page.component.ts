@@ -34,7 +34,7 @@ export class InsertProductPageComponent implements OnDestroy {
   }
 
   public shouldDisableInsertProductForm(): boolean {
-    return this.form.invalid || this.loadingProvider.loading.getValue();
+    return this.form.invalid || this.loadingProvider.getLoading();
   }
 
   public handleInsertProductForm(): void {

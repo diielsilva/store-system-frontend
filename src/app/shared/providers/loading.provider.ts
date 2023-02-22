@@ -5,7 +5,11 @@ import { BehaviorSubject } from "rxjs";
     providedIn: 'root'
 })
 export class LoadingProvider {
-    loading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    private loading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+
+    public getLoading(): boolean {
+        return this.loading.getValue();
+    }
 
     public displayLoading(): void {
         this.loading.next(true);

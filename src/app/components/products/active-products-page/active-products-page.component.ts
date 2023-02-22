@@ -80,13 +80,12 @@ export class ActiveProductsPageComponent implements OnInit, OnDestroy {
   }
 
   public shouldDisableButton(): boolean {
-    return this.loadingProvider.loading.getValue() || this.updateForm!.invalid;
+    return this.loadingProvider.getLoading() || this.updateForm!.invalid;
   }
 
   public getLoading(): boolean {
-    return this.loadingProvider.loading.getValue();
+    return this.loadingProvider.getLoading();
   }
-
 
   private getActiveProducts(): void {
     let subscription$: Subscription = this.productService.getActiveProducts(this.actualPage).subscribe(

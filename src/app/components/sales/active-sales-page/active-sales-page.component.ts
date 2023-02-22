@@ -34,6 +34,10 @@ export class ActiveSalesPageComponent implements OnInit, OnDestroy {
     this.disposeProvider.dispose()
   }
 
+  public getLoading(): boolean {
+    return this.loadingProvider.getLoading();
+  }
+
   private getActiveSales(): void {
     let subscription$: Subscription = this.saleService.getActiveSales(this.actualPage).subscribe(
       {

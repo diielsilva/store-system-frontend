@@ -1,8 +1,7 @@
 <div class="m-2 p-2">
     <p-panel header="Produtos Inativos" [draggable]="false">
         <p-table [value]="products" [lazy]="true" [paginator]="true" [rows]="20" styleClass="p-datatable-striped"
-            [loading]="loadingProvider.loading.getValue()" (onPage)="handlePageChange($event)"
-            [totalRecords]="totalProducts">
+            [loading]="getLoading()" (onPage)="handlePageChange($event)" [totalRecords]="totalProducts">
             <ng-template pTemplate="header">
                 <tr>
                     <th class="bg-primary">ID</th>

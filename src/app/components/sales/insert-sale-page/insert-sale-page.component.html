@@ -22,7 +22,7 @@
                     <p-divider></p-divider>
                     <p-panel header="Produtos no Carrinho">
                         <p-table [value]="saleService.getShoppingCart()" [paginator]="false"
-                            styleClass="p-datatable-striped" [loading]="loadingProvider.loading.getValue()">
+                            styleClass="p-datatable-striped" [loading]="getLoading()">
                             <ng-template pTemplate="header">
                                 <tr>
                                     <th class="bg-primary">ID</th>
