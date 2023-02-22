@@ -1,7 +1,7 @@
 <div class="flex justify-content-center align-items-center h-7">
     <div class="col-10 max-w-700">
         <p-panel header="Cadastrar Produto">
-            <form [formGroup]="form" (ngSubmit)="handleSubmitForm()">
+            <form [formGroup]="form" (ngSubmit)="handleInsertProductForm()">
                 <div class="m-2">
                     <input class="w-full" pInputText type="text" formControlName="name" placeholder="Nome">
                 </div>
@@ -15,7 +15,7 @@
                 </div>
                 <div class="m-2">
                     <button class="w-full" pButton type="submit" label="Cadastrar"
-                        [disabled]="shouldDisableButton()"></button>
+                        [disabled]="shouldDisableInsertProductForm()"></button>
                 </div>
             </form>
         </p-panel>

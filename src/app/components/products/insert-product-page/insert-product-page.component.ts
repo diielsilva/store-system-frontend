@@ -18,26 +18,31 @@ export class InsertProductPageComponent implements OnDestroy {
 
   constructor(private formBuilder: FormBuilder, private productService: ProductService, private disposeProvider: DisposeProvider,
     private messageProvider: MessageProvider, private loadingProvider: LoadingProvider, private authService: AuthenticationService) {
-    this.form = this.formBuilder.group({
-      name: ['', Validators.required],
-      price: [null, [Validators.required, Validators.min(0)]],
-      amount: [null, [Validators.required, Validators.min(0)]]
-    });
+    this.form = this.createInsertProductForm();
   }
 
   ngOnDestroy(): void {
     this.disposeProvider.dispose();
   }
 
-  public handleSubmitForm(): void {
+  private createInsertProductForm(): FormGroup {
+    return this.formBuilder.group({
+      name: ['', Validators.required],
+      price: [null, [Validators.required, Validators.min(0)]],
+      amount: [null, [Validators.required, Validators.min(0)]]
+    });
+  }
+
+  public shouldDisableInsertProductForm(): boolean {
+    return this.form.invalid || this.loadingProvider.loading.getValue();
+  }
+
+  public handleInsertProductForm(): void {
     if (this.form.valid) {
       this.saveProduct();
     }
   }
 
-  public shouldDisableButton(): boolean {
-    return this.form.invalid || this.loadingProvider.loading.getValue();
-  }
   private saveProduct(): void {
     let product: ProductEntity = { name: this.form.get('name')!.value, price: this.form.get('price')!.value, amount: this.form.get('amount')!.value };
     let subscription$ = this.productService.saveProduct(product).subscribe({
