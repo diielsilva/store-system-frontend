@@ -39,7 +39,8 @@ export class TodaySalesPageComponent implements OnInit, OnDestroy {
     let subscription$ = this.saleService.getTodaySales().subscribe({
       next: (sales: SaleEntity[]) => {
         for (let sale of sales) {
-          this.total += sale.total;
+          let totalSale = this.getTotalSalePrice(sale);
+          this.total += totalSale;
         }
         this.sales = sales;
       },
@@ -48,6 +49,10 @@ export class TodaySalesPageComponent implements OnInit, OnDestroy {
       }
     });
     this.disposeProvider.insert(subscription$);
+  }
+
+  public getTotalSalePrice(sale: SaleEntity): number {
+    return sale.total - sale.discount;
   }
 
   public translatePaymentType(paymentType: PaymentType): string {

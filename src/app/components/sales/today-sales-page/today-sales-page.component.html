@@ -5,6 +5,8 @@
             <ng-template pTemplate="header">
                 <tr>
                     <th class="bg-primary">Vendedor</th>
+                    <th class="bg-primary">Sub-Total</th>
+                    <th class="bg-primary">Descontos</th>
                     <th class="bg-primary">Total</th>
                     <th class="bg-primary">Método PGMT.</th>
                     <th class="bg-primary">Data</th>
@@ -14,7 +16,9 @@
             <ng-template pTemplate="body" let-sale>
                 <tr>
                     <td class="border-none">{{ sale.user.name }}</td>
-                    <td class="border-none">{{ sale.total.toFixed(2) | currency }}</td>
+                    <td class="border-none">{{ sale.total | currency }}</td>
+                    <td class="border-none">{{ sale.discount | currency }}</td>
+                    <td class="border-none">{{ getTotalSalePrice(sale) | currency }}</td>
                     <td class="border-none">{{ translatePaymentType(sale.paymentType) }}</td>
                     <td class="border-none">{{ sale.createdAt | date: 'dd/MM/yyyy HH:mm'}}</td>
                     <td class="border-none">

@@ -34,6 +34,10 @@ export class ActiveSalesPageComponent implements OnInit, OnDestroy {
     this.disposeProvider.dispose()
   }
 
+  public getTotalSalePrice(sale: SaleEntity): number {
+    return sale.total - sale.discount;
+  }
+
   public getLoading(): boolean {
     return this.loadingProvider.getLoading();
   }
