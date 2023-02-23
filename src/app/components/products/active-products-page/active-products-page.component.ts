@@ -38,18 +38,6 @@ export class ActiveProductsPageComponent implements OnInit, OnDestroy {
     this.disposeProvider.dispose();
   }
 
-  public displayUpdateForm(product: ProductEntity): void {
-    this.selectedProduct = product;
-    this.dialog = true;
-    this.createUpdateForm(this.selectedProduct!);
-  }
-
-  public updateSelectedProductValues(): void {
-    this.selectedProduct!.name = this.updateForm!.get('name')!.value
-    this.selectedProduct!.price = this.updateForm!.get('price')!.value
-    this.selectedProduct!.amount = this.updateForm!.get('amount')!.value
-  }
-
   private createUpdateForm(product: ProductEntity): void {
     this.updateForm = this.formBuilder.group({
       name: [product.name, Validators.required],
@@ -64,9 +52,23 @@ export class ActiveProductsPageComponent implements OnInit, OnDestroy {
     });
   }
 
+  public getLoading(): boolean {
+    return this.loadingProvider.getLoading();
+  }
+
+  public displayUpdateForm(product: ProductEntity): void {
+    this.selectedProduct = product;
+    this.dialog = true;
+    this.createUpdateForm(this.selectedProduct!);
+  }
+
+  public shouldDisableUpdateForm(): boolean {
+    return this.loadingProvider.getLoading() || this.updateForm!.invalid;
+  }
+
   public handlePageChange(event: LazyLoadEvent): void {
     this.changePage(event.first!);
-    this.searchProduct();
+    this.handleSearchProductForm();
   }
 
   private changePage(rows: number): void {
@@ -79,12 +81,45 @@ export class ActiveProductsPageComponent implements OnInit, OnDestroy {
     this.totalProducts = 0;
   }
 
-  public shouldDisableButton(): boolean {
-    return this.loadingProvider.getLoading() || this.updateForm!.invalid;
+  public updateSelectedProductValues(): void {
+    this.selectedProduct!.name = this.updateForm!.get('name')!.value
+    this.selectedProduct!.price = this.updateForm!.get('price')!.value
+    this.selectedProduct!.amount = this.updateForm!.get('amount')!.value
   }
 
-  public getLoading(): boolean {
-    return this.loadingProvider.getLoading();
+  public handleSearchProductForm(): void {
+    let name: string = this.searchForm === undefined ? '' : this.searchForm.get('name')!.value;
+    let subscription$: Subscription = this.productService.searchProducts(name, this.actualPage).subscribe(
+      {
+        next: (paginatorProducts: PaginatorDto<ProductEntity[]>) => {
+          this.products = paginatorProducts.content;
+          this.totalProducts = paginatorProducts.totalElements;
+        },
+        error: (error: HttpErrorResponse) => {
+          this.messageProvider.displayMessage('error', 'Erro na Listagem', error.error.message === undefined ? 'Não foi possível conectar ao servidor!' : error.error.message);
+          this.resetPaginator();
+        }
+      }
+    );
+    this.disposeProvider.insert(subscription$);
+  }
+
+  public handleUpdateProductForm(): void {
+    if (this.updateForm!.valid) {
+      this.updateSelectedProductValues();
+      let subscription$: Subscription = this.productService.updateProduct(this.selectedProduct!).subscribe({
+        next: () => {
+          this.dialog = false;
+          this.messageProvider.displayMessage('success', 'Sucesso na Edição', 'O produto foi editado com sucesso!');
+          this.getActiveProducts();
+        },
+        error: (error: HttpErrorResponse) => {
+          this.messageProvider.displayMessage('error', 'Erro na Edição', error.error.message === undefined ? 'Não foi possível conectar ao servidor!' : error.error.message);
+          this.getActiveProducts();
+        }
+      });
+      this.disposeProvider.insert(subscription$);
+    }
   }
 
   private getActiveProducts(): void {
@@ -101,42 +136,6 @@ export class ActiveProductsPageComponent implements OnInit, OnDestroy {
       }
     );
     this.disposeProvider.insert(subscription$);
-  }
-
-  public searchProduct(): void {
-    let name: string = this.searchForm === undefined ? '' : this.searchForm.get('name')!.value;
-    let subscription$: Subscription = this.productService.searchProducts(name, this.actualPage).subscribe(
-      {
-        next: (paginatorProducts: PaginatorDto<ProductEntity[]>) => {
-          this.products = paginatorProducts.content;
-          this.totalProducts = paginatorProducts.totalElements;
-        },
-        error: (error: HttpErrorResponse) => {
-          this.messageProvider.displayMessage('error', 'Erro na Listagem', error.error.message === undefined ? 'Não foi possível conectar ao servidor!' : error.error.message);
-          this.resetPaginator();
-        }
-      }
-    );
-    this.disposeProvider.insert(subscription$);
-
-  }
-
-  public updateProduct(): void {
-    if (this.updateForm!.valid) {
-      this.updateSelectedProductValues();
-      let subscription$: Subscription = this.productService.updateProduct(this.selectedProduct!).subscribe({
-        next: () => {
-          this.dialog = false;
-          this.messageProvider.displayMessage('success', 'Sucesso na Edição', 'O produto foi editado com sucesso!');
-          this.getActiveProducts();
-        },
-        error: (error: HttpErrorResponse) => {
-          this.messageProvider.displayMessage('error', 'Erro na Edição', error.error.message === undefined ? 'Não foi possível conectar ao servidor!' : error.error.message);
-          this.getActiveProducts();
-        }
-      });
-      this.disposeProvider.insert(subscription$);
-    }
   }
 
   public removeProduct(id: number): void {

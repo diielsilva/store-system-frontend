@@ -5,7 +5,7 @@
                 Para pesquisar digite um nome, ou apenas clique no botão para listar todos os produtos ativos.
             </div>
             <div>
-                <form class="flex align-items-center" [formGroup]="searchForm!" (ngSubmit)="searchProduct()">
+                <form class="flex align-items-center" [formGroup]="searchForm!" (ngSubmit)="handleSearchProductForm()">
                     <div class="m-1 max-w-700">
                         <input pInputText type="text" placeholder="Pesquisar" formControlName="name">
                     </div>
@@ -46,7 +46,7 @@
 <p-dialog header="Editar Produto" [(visible)]="dialog" [closable]="true" [style]="{width: '50vw'}"
     styleClass="max-w-700" [draggable]="false" [resizable]="false" [modal]="true">
     <ng-template pTemplate="content">
-        <form [formGroup]="updateForm!" (ngSubmit)="updateProduct()">
+        <form [formGroup]="updateForm!" (ngSubmit)="handleUpdateProductForm()">
             <div class="m-2">
                 <input class="w-full" pInputText type="text" formControlName="name" placeholder="Nome">
             </div>
@@ -59,7 +59,7 @@
             </div>
             <div class="m-2 flex justify-content-end">
                 <button class="p-button-text" pButton type="submit" label="Editar"
-                    [disabled]="shouldDisableButton()"></button>
+                    [disabled]="shouldDisableUpdateForm()"></button>
             </div>
         </form>
     </ng-template>
