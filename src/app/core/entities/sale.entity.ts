@@ -6,4 +6,6 @@ export interface SaleEntity extends AbstractEntity {
     user: UserEntity,
     total: number,
     paymentType: PaymentType,
+    discount: number,
+    percentDiscount: number
 }

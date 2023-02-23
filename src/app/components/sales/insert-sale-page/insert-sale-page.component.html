@@ -26,13 +26,17 @@
                             <ng-template pTemplate="header">
                                 <tr>
                                     <th class="bg-primary">ID</th>
-                                    <th class="bg-primary">Quantidade</th>
+                                    <th class="bg-primary">Nome</th>
+                                    <th class="bg-primary">Preço (UNIT.)</th>
+                                    <th class="bg-primary">QTD</th>
                                     <th class="bg-primary">Remover</th>
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-saleProductDto>
                                 <tr>
                                     <td class="border-none">{{ saleProductDto.productId }}</td>
+                                    <td class="border-none">{{ saleProductDto.name }}</td>
+                                    <td class="border-none">{{ saleProductDto.price | currency }}</td>
                                     <td class="border-none">{{ saleProductDto.amount }}</td>
                                     <td class="border-none">
                                         <button pButton icon="pi pi-trash" class="p-button-text"
@@ -42,9 +46,15 @@
                             </ng-template>
                         </p-table>
                         <p-divider></p-divider>
-                        <div class="flex flex-column justify-content-center align-items-center ">
-                            <h3>Sub Total</h3>
-                            <p>{{ totalShoppingCart.toFixed(2) | currency }}</p>
+                        <div class="flex flex-column justify-content-center align-items-start ">
+                            <div class="m-2">
+                                <h3>Sub-Total</h3>
+                                <p>{{ totalShoppingCart.toFixed(2) | currency }}</p>
+                            </div>
+                            <div class="m-2">
+                                <h3>Total</h3>
+                                <p>{{ calculateTotalWithDiscounts() | currency }}</p>
+                            </div>
                         </div>
                     </p-panel>
                 </div>
@@ -53,12 +63,18 @@
                     <div>
                         <div class="m-2">
                             <select
-                                class="w-full text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round outline-none focus:border-primary"
+                                class="w-full text-base text-color surface-overlay p-3 border-1 border-solid surface-border border-round outline-none focus:border-primary"
                                 [(ngModel)]="paymentType">
                                 <option value="CASH">Dinheiro</option>
                                 <option value="CARD">Cartão</option>
                                 <option value="PIX">Pix</option>
                             </select>
+                        </div>
+
+                        <div class="m-2 flex flex-column field">
+                            <p-inputNumber styleClass="w-full" [(ngModel)]="percentDiscount" [minFractionDigits]="2"
+                                [maxFractionDigits]="2" placeholder="Porcentagem do desconto..." [min]="0"
+                                [max]="100"></p-inputNumber>
                         </div>
 
                         <div class="m-2 flex justify-content-between">

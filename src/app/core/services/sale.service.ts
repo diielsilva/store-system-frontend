@@ -5,6 +5,7 @@ import { environment } from "src/app/environment/environment";
 import { PaginatorDto } from "../dtos/generics/paginator.dto";
 import { SaleProductDto } from "../dtos/sales/sale-product.dto";
 import { SaveSaleDto } from "../dtos/sales/save-sale.dto";
+import { ShowPdfSaleDto } from "../dtos/sales/show-pdf-sale.dto";
 import { SaleProductEntity } from "../entities/sale-product.entity";
 import { SaleEntity } from "../entities/sale.entity";
 
@@ -73,8 +74,9 @@ export class SaleService {
         return this.restClient.get<SaleEntity[]>(`${this.api}/today`);
     }
 
-    public getCartPdf(): Observable<Blob> {
-        return this.restClient.post<Blob>(`${this.api}/cart/pdf`, this.shoppingCart, {
+    public getCartPdf(percentDiscount?: number): Observable<Blob> {
+        let ShowPdfSale: ShowPdfSaleDto = { percentDiscount: percentDiscount == undefined ? 0 : percentDiscount, products: this.shoppingCart };
+        return this.restClient.post<Blob>(`${this.api}/cart/pdf`, ShowPdfSale, {
             responseType: 'blob' as 'json',
             headers: {
                 "Content-Type": "application/json",

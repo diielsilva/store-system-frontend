@@ -19,7 +19,7 @@ export class InsertSalePageComponent implements OnInit, OnDestroy {
   form: FormGroup;
   paymentType: string = 'CASH';
   totalShoppingCart: number = 0;
-
+  percentDiscount?: number;
 
   constructor(private formBuilder: FormBuilder, public saleService: SaleService, public loadingProvider: LoadingProvider,
     private disposeProvider: DisposeProvider, private messageProvider: MessageProvider, private productService: ProductService) {
@@ -55,11 +55,12 @@ export class InsertSalePageComponent implements OnInit, OnDestroy {
 
   public confirmSale(): void {
     if (this.saleService.getShoppingCart().length > 0 && this.paymentType != '') {
-      let saveSale: SaveSaleDto = { paymentType: this.paymentType, products: this.saleService.getShoppingCart() };
+      let saveSale: SaveSaleDto = { paymentType: this.paymentType, products: this.saleService.getShoppingCart(), percentDiscount: this.percentDiscount == undefined ? 0 : this.percentDiscount };
       let subscription$ = this.saleService.saveSale(saveSale).subscribe({
         next: () => {
           this.saleService.cleanShoppingCart();
           this.totalShoppingCart = 0;
+          this.percentDiscount = undefined;
           this.messageProvider.displayMessage('success', 'Sucesso no Cadastro', 'A venda foi concluída com sucesso!');
         },
         error: (error: HttpErrorResponse) => {
@@ -73,6 +74,8 @@ export class InsertSalePageComponent implements OnInit, OnDestroy {
   private getActiveProductById(saleProduct: SaleProductDto): void {
     let subscription$ = this.productService.getActiveProductById(saleProduct.productId).subscribe({
       next: (product: ProductEntity) => {
+        saleProduct.name = product.name;
+        saleProduct.price = product.price;
         this.saleService.insertIntoShoppingCart(saleProduct);
         this.calculateTotalShoppingCart();
       },
@@ -84,8 +87,17 @@ export class InsertSalePageComponent implements OnInit, OnDestroy {
 
   }
 
+  public calculateTotalWithDiscounts(): number {
+    if (this.percentDiscount == undefined) {
+      return this.totalShoppingCart;
+    } else {
+      let discount: number = (this.percentDiscount / 100) * this.totalShoppingCart;
+      return this.totalShoppingCart - discount;
+    }
+  }
+
   public getCartPdf(): void {
-    let subscription$ = this.saleService.getCartPdf().subscribe({
+    let subscription$ = this.saleService.getCartPdf(this.percentDiscount).subscribe({
       next: (response: Blob) => {
         const url = window.URL.createObjectURL(response);
         window.open(url);
