@@ -1,4 +1,4 @@
-<p-toolbar *ngIf="authService.isUserOnline()"
+<p-toolbar *ngIf="isUserOnline()"
     styleClass="border-none border-noround flex justify-content-between bg-primary">
     <div>
         <button pButton class="p-button-text text-white" icon="pi pi-align-justify" label="Menu de Opções"
@@ -31,7 +31,7 @@
                                 (click)="displayOrHideSidebar()"></button>
                         </a>
                     </li>
-                    <li *ngIf="authService.isUserAdmin()">
+                    <li *ngIf="isUserAdmin()">
                         <a routerLink="home/products/insert" class="text-decoration-none">
                             <button pButton label="Adicionar" icon="pi pi-plus" class="p-button-text"
                                 (click)="displayOrHideSidebar()"></button>
@@ -45,7 +45,7 @@
                 <p-divider></p-divider>
                 <h3 class="ml-3">Vendas</h3>
                 <ul class="list-decoration-none">
-                    <li *ngIf="authService.isUserAdmin()">
+                    <li *ngIf="isUserAdmin()">
                         <a routerLink="home/sales" class="text-decoration-none">
                             <button pButton label=" Ativas" icon="pi pi-align-justify" (click)="displayOrHideSidebar()"
                                 class="p-button-text"></button>

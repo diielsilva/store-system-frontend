@@ -9,9 +9,17 @@ import { AuthenticationService } from 'src/app/core/services/authentication.serv
 export class NavbarComponent {
   sidebar: boolean = false;
 
-  constructor(public authService: AuthenticationService) { }
+  constructor(private authService: AuthenticationService) { }
 
   public displayOrHideSidebar(): void {
     this.sidebar = !this.sidebar;
+  }
+
+  public isUserOnline(): boolean {
+    return this.authService.isUserOnline();
+  }
+
+  public isUserAdmin(): boolean {
+    return this.authService.isUserAdmin();
   }
 }
