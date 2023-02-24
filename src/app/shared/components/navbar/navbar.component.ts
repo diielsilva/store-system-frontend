@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { AuthenticationService } from 'src/app/core/services/authentication.service';
-import { SidebarProvider } from '../../providers/sidebar.provider';
 
 @Component({
   selector: 'app-navbar',
@@ -8,7 +7,11 @@ import { SidebarProvider } from '../../providers/sidebar.provider';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent {
+  sidebar: boolean = false;
 
-  constructor(public authService: AuthenticationService, public sidebarProvider: SidebarProvider) { }
+  constructor(public authService: AuthenticationService) { }
 
+  public displayOrHideSidebar(): void {
+    this.sidebar = !this.sidebar;
+  }
 }
