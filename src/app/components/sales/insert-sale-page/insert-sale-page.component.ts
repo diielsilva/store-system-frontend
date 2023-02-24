@@ -21,7 +21,7 @@ export class InsertSalePageComponent implements OnInit, OnDestroy {
   totalShoppingCart: number = 0;
   percentDiscount?: number;
 
-  constructor(private formBuilder: FormBuilder, public saleService: SaleService, public loadingProvider: LoadingProvider,
+  constructor(private formBuilder: FormBuilder, private saleService: SaleService, public loadingProvider: LoadingProvider,
     private disposeProvider: DisposeProvider, private messageProvider: MessageProvider, private productService: ProductService) {
     this.form = this.formBuilder.group({
       productId: [null, [Validators.required, Validators.min(0)]],
@@ -43,6 +43,10 @@ export class InsertSalePageComponent implements OnInit, OnDestroy {
 
   public getLoading(): boolean {
     return this.loadingProvider.getLoading();
+  }
+
+  public getShoppingCart(): SaleProductDto[] {
+    return this.saleService.getShoppingCart();
   }
 
   public insertIntoShoppingCart(): void {

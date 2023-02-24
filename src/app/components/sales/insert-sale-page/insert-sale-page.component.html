@@ -18,10 +18,10 @@
                         </div>
                     </form>
                 </div>
-                <div *ngIf="saleService.getShoppingCart().length > 0">
+                <div *ngIf="getShoppingCart().length > 0">
                     <p-divider></p-divider>
                     <p-panel header="Produtos no Carrinho">
-                        <p-table [value]="saleService.getShoppingCart()" [paginator]="false"
+                        <p-table [value]="getShoppingCart()" [paginator]="false"
                             styleClass="p-datatable-striped" [loading]="getLoading()">
                             <ng-template pTemplate="header">
                                 <tr>
