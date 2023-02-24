@@ -21,7 +21,7 @@ export class InactiveProductsPageComponent implements OnInit, OnDestroy {
   totalProducts: number = 0;
 
   constructor(private productService: ProductService, public loadingProvider: LoadingProvider, private messageProvider: MessageProvider,
-    private disposeProvider: DisposeProvider, public authService: AuthenticationService) { }
+    private disposeProvider: DisposeProvider, private authService: AuthenticationService) { }
 
   ngOnInit(): void {
     this.getInactiveProducts();
@@ -33,6 +33,10 @@ export class InactiveProductsPageComponent implements OnInit, OnDestroy {
 
   public getLoading(): boolean {
     return this.loadingProvider.getLoading();
+  }
+
+  public isUserAdmin(): boolean {
+    return this.authService.isUserAdmin();
   }
 
   private getInactiveProducts(): void {

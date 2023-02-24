@@ -8,7 +8,7 @@
                     <th class="bg-primary">Nome</th>
                     <th class="bg-primary">Preço</th>
                     <th class="bg-primary">Quantidade</th>
-                    <th class="bg-primary" *ngIf="authService.isUserAdmin()">Reativar</th>
+                    <th class="bg-primary" *ngIf="isUserAdmin()">Reativar</th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-product>
@@ -17,7 +17,7 @@
                     <td class="border-none">{{ product.name }}</td>
                     <td class="border-none">{{ product.price.toFixed(2) | currency }}</td>
                     <td class="border-none">{{ product.amount }}</td>
-                    <td class="border-none" *ngIf="authService.isUserAdmin()"><button class="p-button-text" pButton
+                    <td class="border-none" *ngIf="isUserAdmin()"><button class="p-button-text" pButton
                             icon="pi pi-refresh" (click)="restoreInactiveProduct(product.id)"></button></td>
                 </tr>
             </ng-template>
