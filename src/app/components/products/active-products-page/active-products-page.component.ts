@@ -26,7 +26,7 @@ export class ActiveProductsPageComponent implements OnInit, OnDestroy {
   selectedProduct?: ProductEntity;
 
   constructor(private productService: ProductService, public loadingProvider: LoadingProvider, private messageProvider: MessageProvider,
-    private disposeProvider: DisposeProvider, public authService: AuthenticationService, private formBuilder: FormBuilder) {
+    private disposeProvider: DisposeProvider, private authService: AuthenticationService, private formBuilder: FormBuilder) {
   }
 
   ngOnInit(): void {
@@ -79,6 +79,10 @@ export class ActiveProductsPageComponent implements OnInit, OnDestroy {
     this.products = [];
     this.actualPage = 0;
     this.totalProducts = 0;
+  }
+
+  public isUserAdmin(): boolean {
+    return this.authService.isUserAdmin();
   }
 
   public updateSelectedProductValues(): void {
