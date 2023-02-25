@@ -25,7 +25,7 @@ export class ActiveProductsPageComponent implements OnInit, OnDestroy {
   totalProducts: number = 0;
   selectedProduct?: ProductEntity;
 
-  constructor(private productService: ProductService, public loadingProvider: LoadingProvider, private messageProvider: MessageProvider,
+  constructor(private productService: ProductService, private loadingProvider: LoadingProvider, private messageProvider: MessageProvider,
     private disposeProvider: DisposeProvider, private authService: AuthenticationService, private formBuilder: FormBuilder) {
   }
 
@@ -93,6 +93,17 @@ export class ActiveProductsPageComponent implements OnInit, OnDestroy {
 
   public handleSearchProductForm(): void {
     let name: string = this.searchForm === undefined ? '' : this.searchForm.get('name')!.value;
+    this.searchProduct(name);
+  }
+
+  public handleUpdateProductForm(): void {
+    if (this.updateForm!.valid) {
+      this.updateSelectedProductValues();
+      this.updateProduct();
+    }
+  }
+
+  private searchProduct(name: string): void {
     let subscription$: Subscription = this.productService.searchProducts(name, this.actualPage).subscribe(
       {
         next: (paginatorProducts: PaginatorDto<ProductEntity[]>) => {
@@ -108,22 +119,19 @@ export class ActiveProductsPageComponent implements OnInit, OnDestroy {
     this.disposeProvider.insert(subscription$);
   }
 
-  public handleUpdateProductForm(): void {
-    if (this.updateForm!.valid) {
-      this.updateSelectedProductValues();
-      let subscription$: Subscription = this.productService.updateProduct(this.selectedProduct!).subscribe({
-        next: () => {
-          this.dialog = false;
-          this.messageProvider.displayMessage('success', 'Sucesso na Edição', 'O produto foi editado com sucesso!');
-          this.getActiveProducts();
-        },
-        error: (error: HttpErrorResponse) => {
-          this.messageProvider.displayMessage('error', 'Erro na Edição', error.error.message === undefined ? 'Não foi possível conectar ao servidor!' : error.error.message);
-          this.getActiveProducts();
-        }
-      });
-      this.disposeProvider.insert(subscription$);
-    }
+  private updateProduct(): void {
+    let subscription$: Subscription = this.productService.updateProduct(this.selectedProduct!).subscribe({
+      next: () => {
+        this.dialog = false;
+        this.messageProvider.displayMessage('success', 'Sucesso na Edição', 'O produto foi editado com sucesso!');
+        this.getActiveProducts();
+      },
+      error: (error: HttpErrorResponse) => {
+        this.messageProvider.displayMessage('error', 'Erro na Edição', error.error.message === undefined ? 'Não foi possível conectar ao servidor!' : error.error.message);
+        this.getActiveProducts();
+      }
+    });
+    this.disposeProvider.insert(subscription$);
   }
 
   private getActiveProducts(): void {
