@@ -8,7 +8,7 @@ import { LoadingProvider } from '../../providers/loading.provider';
 })
 export class LoadingComponent {
 
-  constructor(public loadingProvider: LoadingProvider) { }
+  constructor(private loadingProvider: LoadingProvider) { }
 
   public getLoading(): boolean {
     return this.loadingProvider.getLoading();
