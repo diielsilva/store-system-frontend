@@ -8,6 +8,10 @@ import { MessageProvider } from '../../providers/message.provider';
 })
 export class MessageComponent {
 
-  constructor(public messageProvider: MessageProvider) { }
+  constructor(private messageProvider: MessageProvider) { }
+
+  public hideMessage(): void {
+    this.messageProvider.hideMessage();
+  }
 
 }

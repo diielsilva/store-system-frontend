@@ -1,4 +1,4 @@
-<p-toast position="top-center" (onClose)="messageProvider.hideMessage()">
+<p-toast position="top-center" (onClose)="hideMessage()">
     <ng-template let-message pTemplate="message">
         <div class="flex flex-column" style="flex: 1">
             <h4 class="mb-3">{{ message.summary }}</h4>
