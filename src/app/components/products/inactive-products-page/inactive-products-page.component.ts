@@ -39,6 +39,21 @@ export class InactiveProductsPageComponent implements OnInit, OnDestroy {
     return this.authService.isUserAdmin();
   }
 
+  public handlePageChange(event: LazyLoadEvent): void {
+    this.changePage(event.first!);
+    this.getInactiveProducts();
+  }
+
+  private changePage(rows: number): void {
+    this.actualPage = rows / 20;
+  }
+
+  public resetPaginator(): void {
+    this.products = [];
+    this.actualPage = 0;
+    this.totalProducts = 0;
+  }
+
   private getInactiveProducts(): void {
     let subscription$: Subscription = this.productService.getInactiveProducts(this.actualPage).subscribe(
       {
@@ -69,21 +84,6 @@ export class InactiveProductsPageComponent implements OnInit, OnDestroy {
       }
     );
     this.disposeProvider.insert(subscription$);
-  }
-
-  public handlePageChange(event: LazyLoadEvent): void {
-    this.changePage(event.first!);
-    this.getInactiveProducts();
-  }
-
-  private changePage(rows: number): void {
-    this.actualPage = rows / 20;
-  }
-
-  public resetPaginator(): void {
-    this.products = [];
-    this.actualPage = 0;
-    this.totalProducts = 0;
   }
 
 }
