@@ -57,10 +57,37 @@ export class InsertSalePageComponent implements OnInit, OnDestroy {
     }
   }
 
+  public calculateTotalWithDiscounts(): number {
+    if (this.percentDiscount == undefined) {
+      return this.totalShoppingCart;
+    } else {
+      let discount: number = (this.percentDiscount / 100) * this.totalShoppingCart;
+      return this.totalShoppingCart - discount;
+    }
+  }
+
+  public removeFromShoppingCart(saleProductDto: SaleProductDto): void {
+    this.totalShoppingCart = 0;
+    this.saleService.removeFromShoppingCart(saleProductDto);
+    this.calculateTotalShoppingCart();
+  }
+
+  public shouldDisableNextStepButton(): boolean {
+    return this.saleService.getShoppingCart().length <= 0 && this.paymentType != '';
+  }
+
+  public shouldDisablePdfButton(): boolean {
+    return this.saleService.getShoppingCart().length <= 0;
+  }
+
+  private resetForm(): void {
+    this.form.reset();
+  }
+
   public confirmSale(): void {
     if (this.saleService.getShoppingCart().length > 0 && this.paymentType != '') {
-      let saveSale: SaveSaleDto = { paymentType: this.paymentType, products: this.saleService.getShoppingCart(), percentDiscount: this.percentDiscount == undefined ? 0 : this.percentDiscount };
-      let subscription$ = this.saleService.saveSale(saveSale).subscribe({
+      let saleDto: SaveSaleDto = { paymentType: this.paymentType, products: this.saleService.getShoppingCart(), percentDiscount: this.percentDiscount == undefined ? 0 : this.percentDiscount };
+      let subscription$ = this.saleService.saveSale(saleDto).subscribe({
         next: () => {
           this.saleService.cleanShoppingCart();
           this.totalShoppingCart = 0;
@@ -91,12 +118,16 @@ export class InsertSalePageComponent implements OnInit, OnDestroy {
 
   }
 
-  public calculateTotalWithDiscounts(): number {
-    if (this.percentDiscount == undefined) {
-      return this.totalShoppingCart;
-    } else {
-      let discount: number = (this.percentDiscount / 100) * this.totalShoppingCart;
-      return this.totalShoppingCart - discount;
+  private calculateTotalShoppingCart(): void {
+    for (let saleProduct of this.saleService.getShoppingCart()) {
+      this.totalShoppingCart = 0;
+      let subscription$ = this.productService.getActiveProductById(saleProduct.productId).subscribe({
+        next: (product: ProductEntity) => {
+          this.totalShoppingCart += saleProduct.amount * product.price;
+        },
+        error: () => { }
+      })
+      this.disposeProvider.insert(subscription$);
     }
   }
 
@@ -111,37 +142,6 @@ export class InsertSalePageComponent implements OnInit, OnDestroy {
       }
     });
     this.disposeProvider.insert(subscription$);
-  }
-
-  private calculateTotalShoppingCart(): void {
-    for (let saleProduct of this.saleService.getShoppingCart()) {
-      this.totalShoppingCart = 0;
-      let subscription$ = this.productService.getActiveProductById(saleProduct.productId).subscribe({
-        next: (product: ProductEntity) => {
-          this.totalShoppingCart += saleProduct.amount * product.price;
-        },
-        error: () => { }
-      })
-      this.disposeProvider.insert(subscription$);
-    }
-  }
-
-  public removeFromShoppingCart(saleProductDto: SaleProductDto): void {
-    this.totalShoppingCart = 0;
-    this.saleService.removeFromShoppingCart(saleProductDto);
-    this.calculateTotalShoppingCart();
-  }
-
-  public shouldDisableNextStepButton(): boolean {
-    return this.saleService.getShoppingCart().length <= 0 && this.paymentType != '';
-  }
-
-  public shouldDisablePdfButton(): boolean {
-    return this.saleService.getShoppingCart().length <= 0;
-  }
-
-  private resetForm(): void {
-    this.form.reset();
   }
 
 }
