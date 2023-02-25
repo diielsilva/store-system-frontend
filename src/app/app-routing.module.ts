@@ -26,7 +26,7 @@ const routes: Routes = [
       },
       {
         path: 'sales', children: [
-          { path: '', component: ActiveSalesPageComponent },
+          { path: '', canActivate: [AdminGuard], component: ActiveSalesPageComponent },
           { path: 'insert', component: InsertSalePageComponent },
           { path: 'today', component: TodaySalesPageComponent }
         ]
